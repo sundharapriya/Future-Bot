@@ -4,7 +4,7 @@ import tempfile
 import pytest
 from fastapi.testclient import TestClient
 
-from main import app
+from backend.main import app
 
 client = TestClient(app)
 

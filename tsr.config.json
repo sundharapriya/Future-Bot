@@ -1,0 +1,6 @@
+{
+  "generatedRouteTree": ".tanstack/routeTree.gen.ts",
+  "tmpDir": ".tanstack/tmp",
+  "routesDirectory": "./src/routes",
+  "autoCodeSplitting": true
+}

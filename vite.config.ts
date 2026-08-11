@@ -13,9 +13,9 @@ export default defineConfig({
       server: { entry: "server" },
     }),
     // File-based routing code-gen. Must come before react(). Disable
-    // automatic HMR injection to avoid duplicate-declaration issues on
-    // Windows during code-splitting generation.
-    TanStackRouterVite({ autoCodeSplitting: true, addHmr: false }),
+    // automatic HMR injection and code-splitting to avoid duplicate-declaration
+    // issues on Windows.
+    TanStackRouterVite({ autoCodeSplitting: false, addHmr: false }),
     react(),
     tailwindcss(),
     tsConfigPaths(),
@@ -24,7 +24,9 @@ export default defineConfig({
   // temporary router generator output directory. On Windows the generator
   // may write into a tmp dir and then rename into place which can trigger
   // Vite's watcher and cause a file-lock race. Ignoring these avoids that.
+  // Also disable HMR to prevent duplicate declarations with TanStack Router.
   server: {
+    hmr: false,
     watch: {
       ignored: ["**/src/routeTree.gen.ts", "**/.tanstack/**"],
     },

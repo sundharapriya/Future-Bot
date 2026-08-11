@@ -59,7 +59,7 @@ function SetupPage() {
       const result = await api.startInterview({
         category,
         difficulty,
-        num_questions: numQuestions,
+        number_of_questions: numQuestions,
       });
       saveSession({
         sessionId: result.session_id,

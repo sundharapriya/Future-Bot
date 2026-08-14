@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import { Brain, Menu, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Brain, Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -15,6 +16,14 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    setOpen(false);
+    navigate({ to: "/" });
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -24,9 +33,7 @@ export function Navbar() {
             <Brain className="h-5 w-5" />
           </span>
           <span className="min-w-0">
-            <span className="block truncate font-display text-base font-bold">
-              InterviewAI
-            </span>
+            <span className="block truncate font-display text-base font-bold">InterviewAI</span>
             <span className="hidden text-xs text-muted-foreground sm:block">
               Preparation Assistant
             </span>
@@ -46,9 +53,34 @@ export function Navbar() {
               </Link>
             ))}
           </nav>
-          <Button asChild variant="hero" size="sm" className="hidden sm:inline-flex">
-            <Link to="/setup">Start Interview</Link>
-          </Button>
+          
+          {isAuthenticated && user ? (
+            <div className="hidden items-center gap-2 sm:flex">
+              <div className="flex items-center gap-2 rounded-lg bg-secondary px-3 py-2">
+                <User className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground">{user.name}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <div className="hidden items-center gap-2 sm:flex">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button asChild variant="hero" size="sm">
+                <Link to="/register">Get Started</Link>
+              </Button>
+            </div>
+          )}
+          
           <Button
             variant="ghost"
             size="icon"
@@ -80,11 +112,37 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Button asChild variant="hero" className="mt-2 sm:hidden">
-            <Link to="/setup" onClick={() => setOpen(false)}>
-              Start Interview
-            </Link>
-          </Button>
+          {isAuthenticated && user ? (
+            <>
+              <div className="my-2 border-t border-border/70" />
+              <div className="flex items-center gap-2 rounded-lg bg-secondary px-3 py-2.5">
+                <User className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground">{user.name}</span>
+              </div>
+              <Button
+                variant="ghost"
+                className="justify-start gap-2"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="my-2 border-t border-border/70" />
+              <Button asChild variant="ghost" className="justify-start">
+                <Link to="/login" onClick={() => setOpen(false)}>
+                  Sign In
+                </Link>
+              </Button>
+              <Button asChild variant="hero" className="mt-2">
+                <Link to="/register" onClick={() => setOpen(false)}>
+                  Get Started
+                </Link>
+              </Button>
+            </>
+          )}
         </nav>
       </div>
     </header>

@@ -7,6 +7,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ScoreBar } from "@/components/ScoreBar";
 import { Button } from "@/components/ui/button";
 import { api, type Evaluation, type ScoreResponse } from "@/lib/api";
+import { RequireAuth } from "@/lib/auth-context";
 import { DEFAULT_SESSION, loadSession, type InterviewSession } from "@/lib/interview-session";
 
 export const Route = createFileRoute("/evaluation")({
@@ -62,19 +63,21 @@ function EvaluationPage() {
 
   if (loading && !hasData) {
     return (
+      <RequireAuth>
       <div className="mx-auto max-w-5xl px-4 py-24">
         <LoadingSpinner label="The AI is evaluating your answers…" />
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth>
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <header>
         <h1 className="text-3xl font-bold sm:text-4xl">Your evaluation</h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Scored on how accurate, clear, technically deep and well-communicated your answers
-          were.
+          Scored on how accurate, clear, technically deep and well-communicated your answers were.
         </p>
       </header>
 
@@ -156,5 +159,6 @@ function EvaluationPage() {
         </Button>
       </div>
     </div>
+    </RequireAuth>
   );
 }

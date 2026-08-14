@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   backend-tests:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install backend dependencies
         run: |
@@ -25,9 +25,7 @@ jobs:
 
       - name: Run backend tests
         working-directory: backend
-        run: |
-          python -m pytest -q
-
+        run: python -m pytest -q
   frontend-build:
     name: Frontend build
     runs-on: ubuntu-latest
@@ -37,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install frontend dependencies
         run: npm ci

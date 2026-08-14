@@ -14,7 +14,7 @@ print("=" * 70)
 
 # Test health endpoint
 try:
-    health_resp = urllib.request.urlopen('http://127.0.0.1:8000/api/health')
+    health_resp = urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health')
     health_data = json.loads(health_resp.read())
     print("\n✓ Backend Health Check:")
     print(f"  Status: {health_data.get('status')}")

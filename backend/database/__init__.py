@@ -1,30 +1,42 @@
 import os
 from pathlib import Path
 
-from sqlalchemy import create_engine, pool
+from sqlalchemy import create_engine, pool, text
 from sqlalchemy.orm import declarative_base, sessionmaker
+
+from core.config import settings
 
 BASE_DIR = Path(__file__).resolve().parent
 DB_FILE = BASE_DIR.parent / "interview_history.db"
 
-# Use PostgreSQL if DATABASE_URL is set, otherwise fall back to SQLite
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    f"sqlite:///{DB_FILE}"
-)
+# Prefer explicit env var, otherwise use settings (which has a default).
+raw_database_url = os.getenv("DATABASE_URL") or settings.DATABASE_URL or f"sqlite:///{DB_FILE}"
+
+# Normalize SQLite relative paths to absolute paths so the engine can open the file
+if raw_database_url.startswith("sqlite:"):
+    # extract path portion after the scheme
+    path_part = raw_database_url.split("sqlite:", 1)[1]
+    # strip leading slashes
+    normalized = path_part.lstrip("/")
+    # if this is a relative path, resolve it against the backend directory
+    if not os.path.isabs(normalized):
+        abs_path = (BASE_DIR / normalized).resolve()
+        DATABASE_URL = f"sqlite:///{abs_path.as_posix()}"
+    else:
+        DATABASE_URL = raw_database_url
+else:
+    DATABASE_URL = raw_database_url
 
 # Configure the engine based on database type
 if DATABASE_URL.startswith("postgresql"):
-    # PostgreSQL configuration
     engine = create_engine(
         DATABASE_URL,
         pool_size=10,
         max_overflow=20,
-        pool_pre_ping=True,  # Verify connections before using them
+        pool_pre_ping=True,
         echo=False,
     )
 else:
-    # SQLite configuration
     engine = create_engine(
         DATABASE_URL,
         connect_args={"check_same_thread": False},
@@ -36,6 +48,35 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, futu
 Base = declarative_base()
 
 
+def _column_exists(conn, table_name: str, column_name: str) -> bool:
+    if engine.dialect.name == "sqlite":
+        result = conn.execute(text(f"PRAGMA table_info({table_name})"))
+        return any(row[1] == column_name for row in result)
+    else:
+        result = conn.execute(text(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_name = :table_name AND column_name = :column_name"
+        ), {"table_name": table_name, "column_name": column_name})
+        return result.first() is not None
+
+
+def _ensure_column(conn, table_name: str, column_name: str, column_type: str) -> None:
+    if _column_exists(conn, table_name, column_name):
+        return
+    if engine.dialect.name == "sqlite":
+        conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}"))
+    else:
+        conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS {column_name} {column_type}"))
+
+
 def init_db() -> None:
     """Initialize the database by creating all tables."""
     Base.metadata.create_all(bind=engine)
+    # Ensure new optional profile columns exist for development/test DBs
+    try:
+        with engine.begin() as conn:
+            _ensure_column(conn, "users", "bio", "TEXT")
+            _ensure_column(conn, "users", "avatar_url", "VARCHAR(512)")
+    except Exception:
+        # best-effort: ignore errors from DBs that don't support ALTER TABLE or when columns already exist.
+        pass

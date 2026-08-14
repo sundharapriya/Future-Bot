@@ -1,5 +1,6 @@
 import os
 import tempfile
+import time
 from pathlib import Path
 from typing import BinaryIO
 
@@ -18,7 +19,6 @@ SUPPORTED_AUDIO_CONTENT_TYPES = {
     "audio/mp4": ".mp4",
 }
 MAX_AUDIO_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
-
 SUPPORTED_AUDIO_EXTENSIONS = set(SUPPORTED_AUDIO_CONTENT_TYPES.values())
 
 OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
@@ -58,18 +58,16 @@ def _get_api_key() -> str:
 
 
 def _write_temp_audio_file(upload_file: UploadFile, suffix: str) -> Path:
-    try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-            total = 0
-            while chunk := upload_file.file.read(4096):
-                total += len(chunk)
-                if total > MAX_AUDIO_UPLOAD_SIZE:
-                    raise SpeechToTextError("Audio file is too large. Maximum size is 5 MB.")
-                tmp.write(chunk)
-            tmp.flush()
-            temp_path = Path(tmp.name)
-    finally:
-        upload_file.file.close()
+    upload_file.file.seek(0)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+        total = 0
+        while chunk := upload_file.file.read(4096):
+            total += len(chunk)
+            if total > MAX_AUDIO_UPLOAD_SIZE:
+                raise SpeechToTextError("Audio file is too large. Maximum size is 5 MB.")
+            tmp.write(chunk)
+        tmp.flush()
+        temp_path = Path(tmp.name)
 
     if temp_path.stat().st_size == 0:
         temp_path.unlink(missing_ok=True)
@@ -89,11 +87,18 @@ def _transcribe_with_openai(audio_path: Path) -> str:
     api_key = _get_api_key()
     openai.api_key = api_key
 
-    try:
-        with open(audio_path, "rb") as audio_file:
-            transcript = openai.Audio.transcribe("gpt-4o-transcribe", audio_file)
-    except Exception as exc:
-        raise SpeechToTextError(f"Speech transcription failed: {exc}") from exc
+    last_exc = None
+    for attempt in range(3):
+        try:
+            with open(audio_path, "rb") as audio_file:
+                transcript = openai.Audio.transcribe("gpt-4o-transcribe", file=audio_file)
+            break
+        except Exception as exc:
+            last_exc = exc
+            if attempt < 2:
+                time.sleep(1 + attempt)
+    else:
+        raise SpeechToTextError(f"Speech transcription failed after retries: {last_exc}") from last_exc
 
     if not isinstance(transcript, dict) or "text" not in transcript:
         raise SpeechToTextError("Speech transcription returned an unexpected response")

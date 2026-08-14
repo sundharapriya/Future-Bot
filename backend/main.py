@@ -7,24 +7,32 @@ from typing import List
 # `backend.main` from the repository root (so `uvicorn backend.main:app` works).
 sys.path.insert(0, os.path.dirname(__file__))
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from services.db import DatabaseError
 from services.speech_to_text import SpeechToTextError
+from database import init_db
 
-# Load environment variables from .env if present
-load_dotenv()
+# Load environment variables from the backend folder's .env if present
+backend_dir = os.path.dirname(__file__)
+load_dotenv(dotenv_path=os.path.join(backend_dir, ".env"))
 
 # Basic config
 APP_NAME = "AI Interview Assistant"
-API_PREFIX = "/api"
+API_PREFIX = "/api/v1"
 
 logger = logging.getLogger("uvicorn.error")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
 # Create app
-app = FastAPI(title=APP_NAME)
+app = FastAPI(title=APP_NAME, lifespan=lifespan)
 
 # CORS configuration
 _allowed_origins = os.getenv("ALLOWED_ORIGINS", "*")
@@ -45,16 +53,14 @@ app.add_middleware(
 from routes import health as health_route  # local import
 from routes import interview as interview_route  # local import
 from routes import speech as speech_route  # local import
-from database import init_db
+from routes import auth as auth_route  # local import
+from routes import profile as profile_route  # local import
 
 app.include_router(health_route.router, prefix=API_PREFIX)
 app.include_router(interview_route.router, prefix=API_PREFIX)
 app.include_router(speech_route.router, prefix=API_PREFIX)
-
-
-@app.on_event("startup")
-async def startup_event() -> None:
-    init_db()
+app.include_router(auth_route.router, prefix=API_PREFIX)
+app.include_router(profile_route.router, prefix=API_PREFIX)
 
 
 # Exception handlers

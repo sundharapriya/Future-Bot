@@ -13,9 +13,9 @@ import { AppBackground } from "@/components/layout/AppBackground";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/lib/auth-context";
 import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
-
 
 function NotFoundComponent() {
   return (
@@ -130,18 +130,19 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppBackground />
-      <div className="relative flex min-h-screen w-full flex-col">
-        <Navbar />
-        <main className="flex-1">
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <AppBackground />
+        <div className="relative flex min-h-screen w-full flex-col">
+          <Navbar />
+          <main className="flex-1">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
 
-      <Toaster position="top-center" richColors />
+        <Toaster position="top-center" richColors />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
-

@@ -13,8 +13,8 @@ export function Footer() {
             <span className="font-display font-bold">InterviewAI</span>
           </div>
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-            AI-powered mock interviews with instant evaluation, personalised feedback and a
-            complete score report.
+            AI-powered mock interviews with instant evaluation, personalised feedback and a complete
+            score report.
           </p>
         </div>
 

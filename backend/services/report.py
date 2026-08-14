@@ -104,10 +104,10 @@ def generate_final_report(session_id: str) -> dict | None:
     overall_feedback = _build_overall_feedback(scores.get("average_score", 0))
 
     breakdown = [
-        {"Accuracy": scores.get("accuracy", 0.0)},
-        {"Technical knowledge": scores.get("technical_knowledge", 0.0)},
-        {"Clarity": scores.get("clarity", 0.0)},
-        {"Completeness": scores.get("completeness", 0.0)},
+        {"label": "Accuracy", "score": scores.get("accuracy", 0.0)},
+        {"label": "Technical knowledge", "score": scores.get("technical_knowledge", 0.0)},
+        {"label": "Clarity", "score": scores.get("clarity", 0.0)},
+        {"label": "Completeness", "score": scores.get("completeness", 0.0)},
     ]
 
     return {

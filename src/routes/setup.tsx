@@ -1,11 +1,21 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Brain, Database, Gauge, Layers, ListOrdered, Server, Users } from "lucide-react";
+import {
+  ArrowRight,
+  Brain,
+  Database,
+  Gauge,
+  Layers,
+  ListOrdered,
+  Server,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { api, type Category, type Difficulty } from "@/lib/api";
+import { RequireAuth } from "@/lib/auth-context";
 import { saveSession } from "@/lib/interview-session";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +89,7 @@ function SetupPage() {
   };
 
   return (
+    <RequireAuth>
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
       <header>
         <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs font-semibold text-primary">
@@ -187,5 +198,6 @@ function SetupPage() {
 
       {loading ? <LoadingSpinner label="Generating your questions…" /> : null}
     </div>
+    </RequireAuth>
   );
 }

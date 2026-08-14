@@ -11,7 +11,7 @@ class DatabaseError(Exception):
     pass
 
 from database import SessionLocal, init_db
-from models import Answer, Interview, Question
+from models import Answer, Interview, Question, User, RevokedToken
 
 
 def get_db_session() -> Session:
@@ -128,6 +128,99 @@ def mark_interview_completed(session_id: str) -> Interview:
 def get_interview_record(session_id: str) -> Interview | None:
     with SessionLocal() as db:
         return db.execute(select(Interview).where(Interview.session_id == session_id)).scalar_one_or_none()
+
+
+def create_user(name: str, email: str, password_hash: str, preferred_role: str | None = None) -> User:
+    init_db()
+    with SessionLocal() as db:
+        try:
+            existing = db.execute(select(User).where(User.email == email)).scalar_one_or_none()
+            if existing is not None:
+                raise DatabaseError("User with this email already exists")
+            user = User(name=name, email=email, password_hash=password_hash, preferred_role=preferred_role)
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+            return user
+        except SQLAlchemyError as exc:
+            db.rollback()
+            raise DatabaseError(f"Failed to create user: {exc}") from exc
+
+
+def get_user_by_email(email: str) -> User | None:
+    with SessionLocal() as db:
+        try:
+            return db.execute(select(User).where(User.email == email)).scalar_one_or_none()
+        except SQLAlchemyError as exc:
+            raise DatabaseError("Failed to query user by email") from exc
+
+
+def get_user_by_id(user_id: int) -> User | None:
+    with SessionLocal() as db:
+        try:
+            return db.execute(select(User).where(User.id == int(user_id))).scalar_one_or_none()
+        except SQLAlchemyError as exc:
+            raise DatabaseError("Failed to query user by id") from exc
+
+
+def update_user_profile(user_id: int, name: str | None = None, preferred_role: str | None = None, bio: str | None = None, avatar_url: str | None = None) -> User:
+    with SessionLocal() as db:
+        try:
+            user = db.execute(select(User).where(User.id == int(user_id))).scalar_one_or_none()
+            if user is None:
+                raise DatabaseError("User not found")
+            if name is not None:
+                user.name = name
+            if preferred_role is not None:
+                user.preferred_role = preferred_role
+            if bio is not None:
+                user.bio = bio
+            if avatar_url is not None:
+                user.avatar_url = avatar_url
+            user.updated_at = datetime.utcnow()
+            db.commit()
+            db.refresh(user)
+            return user
+        except SQLAlchemyError as exc:
+            db.rollback()
+            raise DatabaseError("Failed to update user profile") from exc
+
+
+def update_user_password(user_id: int, new_password_hash: str) -> None:
+    with SessionLocal() as db:
+        try:
+            user = db.execute(select(User).where(User.id == int(user_id))).scalar_one_or_none()
+            if user is None:
+                raise DatabaseError("User not found")
+            user.password_hash = new_password_hash
+            user.updated_at = datetime.utcnow()
+            db.commit()
+        except SQLAlchemyError as exc:
+            db.rollback()
+            raise DatabaseError("Failed to update user password") from exc
+
+
+def revoke_token(jti: str) -> None:
+    with SessionLocal() as db:
+        try:
+            existing = db.execute(select(RevokedToken).where(RevokedToken.jti == jti)).scalar_one_or_none()
+            if existing is not None:
+                return
+            rt = RevokedToken(jti=jti)
+            db.add(rt)
+            db.commit()
+        except SQLAlchemyError as exc:
+            db.rollback()
+            raise DatabaseError("Failed to revoke token") from exc
+
+
+def is_token_revoked(jti: str) -> bool:
+    with SessionLocal() as db:
+        try:
+            existing = db.execute(select(RevokedToken).where(RevokedToken.jti == jti)).scalar_one_or_none()
+            return existing is not None
+        except SQLAlchemyError as exc:
+            raise DatabaseError("Failed to check token revocation") from exc
 
 
 def get_history_by_session(session_id: str) -> dict | None:

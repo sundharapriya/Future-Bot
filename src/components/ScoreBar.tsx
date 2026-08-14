@@ -17,7 +17,10 @@ export function ScoreBar({ label, value, className }: ScoreBarProps) {
       <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
         <div
           className="h-full rounded-full bg-gradient-primary"
-          style={{ width: `${Math.max(0, Math.min(100, value))}%`, transition: "width 1s cubic-bezier(0.22,1,0.36,1)" }}
+          style={{
+            width: `${Math.max(0, Math.min(100, value))}%`,
+            transition: "width 1s cubic-bezier(0.22,1,0.36,1)",
+          }}
         />
       </div>
     </div>

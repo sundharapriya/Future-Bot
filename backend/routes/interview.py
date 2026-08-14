@@ -142,7 +142,7 @@ async def evaluate_answer(payload: EvaluationRequest):
 
     # store evaluation in session for scoring
     try:
-        session_manager.store_evaluation(payload.session_id, payload.question_number, result.dict())
+        session_manager.store_evaluation(payload.session_id, payload.question_number, result.model_dump())
     except DatabaseError:
         pass
 

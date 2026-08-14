@@ -25,6 +25,9 @@ package-lock.json
 pnpm-lock.yaml
 bun.lock
 
+# Local backend database
+/backend/interview_history.db
+
 # VSCode
 .vscode/
 

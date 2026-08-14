@@ -5,7 +5,7 @@ client = TestClient(app)
 
 
 def test_transcribe_no_file():
-    resp = client.post("/api/speech/transcribe")
+    resp = client.post("/api/v1/speech/transcribe")
     assert resp.status_code == 422 or resp.status_code == 400
 
 
@@ -14,5 +14,5 @@ def test_transcribe_invalid_file(tmp_path):
     f = tmp_path / "not_audio.txt"
     f.write_text("hello")
     with open(f, "rb") as fh:
-        resp = client.post("/api/speech/transcribe", files={"file": ("not_audio.txt", fh, "text/plain")})
+        resp = client.post("/api/v1/speech/transcribe", files={"file": ("not_audio.txt", fh, "text/plain")})
     assert resp.status_code == 400

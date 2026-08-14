@@ -113,6 +113,11 @@ class InterviewHistoryResponse(BaseModel):
     questions: list[QuestionHistory]
 
 
+class BreakdownItem(BaseModel):
+    label: str
+    score: float
+
+
 class InterviewReportResponse(BaseModel):
     session_id: str
     total_questions: int
@@ -122,7 +127,7 @@ class InterviewReportResponse(BaseModel):
     technical_knowledge: float
     clarity: float
     completeness: float
-    breakdown: list[dict[str, float]]
+    breakdown: list[BreakdownItem]
     strong_areas: list[str]
     weak_areas: list[str]
     recommendations: list[str]

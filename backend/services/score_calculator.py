@@ -34,7 +34,9 @@ def calculate_scores(evaluations: List[Dict[str, Any]]) -> Dict[str, Any]:
         clarity = float(ev.get("clarity", 0))
         completeness = float(ev.get("completeness", 0))
 
-        question_scores.append({"question_number": ev.get("question_number"), "score": score})
+        question_number = ev.get("question_number")
+        label = f"Question {question_number}" if question_number is not None else "Question"
+        question_scores.append({"label": label, "score": score})
         accuracy_scores.append(accuracy)
         technical_scores.append(technical)
         clarity_scores.append(clarity)

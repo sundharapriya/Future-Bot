@@ -49,3 +49,26 @@ class Answer(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     question = relationship("Question", back_populates="answers")
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(256), nullable=True)
+    email = Column(String(256), unique=True, index=True, nullable=False)
+    password_hash = Column(String(512), nullable=False)
+    preferred_role = Column(String(128), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=True)
+    bio = Column(Text, nullable=True)
+    avatar_url = Column(String(512), nullable=True)
+
+
+class RevokedToken(Base):
+    __tablename__ = "revoked_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    jti = Column(String(64), unique=True, index=True, nullable=False)
+    revoked_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+

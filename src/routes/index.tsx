@@ -1,16 +1,9 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  BarChart3,
-  Brain,
-  ClipboardCheck,
-  Mic,
-  Sparkles,
-  Target,
-} from "lucide-react";
+import { ArrowRight, BarChart3, Brain, ClipboardCheck, Mic, Sparkles, Target } from "lucide-react";
 
 import heroImage from "@/assets/hero-interview.jpg";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,14 +35,12 @@ const features = [
   {
     icon: Mic,
     title: "Voice and text answers",
-    description:
-      "Type your answer or speak it out loud, just like a real interview conversation.",
+    description: "Type your answer or speak it out loud, just like a real interview conversation.",
   },
   {
     icon: Brain,
     title: "AI evaluation",
-    description:
-      "Each answer is scored on accuracy, clarity, technical depth and communication.",
+    description: "Each answer is scored on accuracy, clarity, technical depth and communication.",
   },
   {
     icon: Target,
@@ -66,8 +57,7 @@ const features = [
   {
     icon: ClipboardCheck,
     title: "Six practice tracks",
-    description:
-      "Python, SQL, Machine Learning, Artificial Intelligence, Data Structures and HR.",
+    description: "Python, SQL, Machine Learning, Artificial Intelligence, Data Structures and HR.",
   },
 ];
 
@@ -79,6 +69,8 @@ const stats = [
 ];
 
 function HomePage() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div>
       <section className="relative overflow-hidden bg-hero-glow">
@@ -92,19 +84,34 @@ function HomePage() {
               AI Interview <span className="text-gradient">Preparation Assistant</span>
             </h1>
             <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
-              Practise with realistic, AI-conducted mock interviews. Answer by voice or text,
-              get every response evaluated instantly, and finish with a personalised score
-              report that shows exactly what to improve.
+              Practise with realistic, AI-conducted mock interviews. Answer by voice or text, get
+              every response evaluated instantly, and finish with a personalised score report that
+              shows exactly what to improve.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Button asChild variant="hero" size="lg">
-                <Link to="/setup">
-                  Start Interview <ArrowRight />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link to="/report">View sample report</Link>
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <Button asChild variant="hero" size="lg">
+                    <Link to="/setup">
+                      Start Interview <ArrowRight />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/report">View sample report</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild variant="hero" size="lg">
+                    <Link to="/register">
+                      Get Started <ArrowRight />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/login">Sign In</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             <dl className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -135,8 +142,8 @@ function HomePage() {
         <div className="max-w-2xl">
           <h2 className="text-3xl font-bold sm:text-4xl">Everything you need to prepare</h2>
           <p className="mt-4 text-muted-foreground">
-            A complete practice loop: generated questions, natural answering, objective
-            evaluation and a report you can act on.
+            A complete practice loop: generated questions, natural answering, objective evaluation
+            and a report you can act on.
           </p>
         </div>
 
@@ -157,14 +164,22 @@ function HomePage() {
         <div className="surface-card flex flex-col items-center gap-6 p-10 text-center">
           <h2 className="text-2xl font-bold sm:text-3xl">Ready for your mock interview?</h2>
           <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
-            Pick a topic, choose your difficulty and question count, and start answering in
-            under a minute.
+            Pick a topic, choose your difficulty and question count, and start answering in under a
+            minute.
           </p>
-          <Button asChild variant="hero" size="lg">
-            <Link to="/setup">
-              Start Interview <ArrowRight />
-            </Link>
-          </Button>
+          {isAuthenticated ? (
+            <Button asChild variant="hero" size="lg">
+              <Link to="/setup">
+                Start Interview <ArrowRight />
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild variant="hero" size="lg">
+              <Link to="/register">
+                Get Started <ArrowRight />
+              </Link>
+            </Button>
+          )}
         </div>
       </section>
     </div>

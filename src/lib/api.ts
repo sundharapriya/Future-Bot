@@ -18,6 +18,34 @@ export type Category =
 
 export type Difficulty = "Easy" | "Medium" | "Hard";
 
+// Auth types
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  preferred_role?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  access_token: string;
+  token_type?: string;
+}
+
+export interface UserProfile {
+  id: number;
+  name: string;
+  email: string;
+  preferred_role?: string;
+  bio?: string;
+  avatar_url?: string;
+}
+
 export interface StartInterviewRequest {
   category: Category;
   difficulty: Difficulty;
@@ -126,21 +154,49 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 }
 
+export async function register(body: RegisterRequest): Promise<AuthResponse> {
+  return request<AuthResponse>("/api/v1/auth/register", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export async function login(body: LoginRequest): Promise<AuthResponse> {
+  return request<AuthResponse>("/api/v1/auth/login", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export async function getCurrentUser(token: string): Promise<UserProfile> {
+  return request<UserProfile>("/api/v1/auth/me", {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export async function logout(token: string): Promise<{ success: boolean; message: string }> {
+  return request<{ success: boolean; message: string }>("/api/v1/auth/logout", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
 export const api = {
   startInterview: (body: StartInterviewRequest) =>
-    request<StartInterviewResponse>("/api/interview/start", {
+    request<StartInterviewResponse>("/api/v1/interview/start", {
       method: "POST",
       body: JSON.stringify(body),
     }),
 
   getQuestion: (session_id: string) =>
-    request<Question>(`/api/interview/question/${encodeURIComponent(session_id)}`, {
+    request<Question>(`/api/v1/interview/question/${encodeURIComponent(session_id)}`, {
       method: "GET",
     }),
 
   submitAnswer: (body: SubmitAnswerRequest) =>
     request<{ status: string; message: string; session_id: string; question_number: number }>(
-      "/api/interview/answer",
+      "/api/v1/interview/answer",
       {
         method: "POST",
         body: JSON.stringify(body),
@@ -148,25 +204,25 @@ export const api = {
     ),
 
   evaluateAnswer: (body: SubmitAnswerRequest) =>
-    request<Evaluation>("/api/interview/evaluate", {
+    request<Evaluation>("/api/v1/interview/evaluate", {
       method: "POST",
       body: JSON.stringify(body),
     }),
 
   getScore: (sessionId: string) =>
-    request<ScoreResponse>(`/api/interview/score/${encodeURIComponent(sessionId)}`, {
+    request<ScoreResponse>(`/api/v1/interview/score/${encodeURIComponent(sessionId)}`, {
       method: "GET",
     }),
 
   getFinalReport: (sessionId: string) =>
-    request<FinalReport>(`/api/interview/report/${encodeURIComponent(sessionId)}`, {
+    request<FinalReport>(`/api/v1/interview/report/${encodeURIComponent(sessionId)}`, {
       method: "GET",
     }),
 
   transcribeSpeech: (file: File) => {
     const form = new FormData();
     form.append("file", file);
-    return request<{ status: string; text: string }>("/api/speech/transcribe", {
+    return request<{ status: string; text: string }>("/api/v1/speech/transcribe", {
       method: "POST",
       body: form,
     });

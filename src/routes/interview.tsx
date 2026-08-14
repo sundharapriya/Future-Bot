@@ -18,7 +18,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { api, type Evaluation, type Question } from "@/lib/api";
-import { DEFAULT_SESSION, loadSession, saveSession, type InterviewSession } from "@/lib/interview-session";
+import { RequireAuth } from "@/lib/auth-context";
+import {
+  DEFAULT_SESSION,
+  loadSession,
+  saveSession,
+  type InterviewSession,
+} from "@/lib/interview-session";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/interview")({
@@ -33,7 +39,8 @@ export const Route = createFileRoute("/interview")({
       { property: "og:title", content: "Mock Interview — InterviewAI" },
       {
         property: "og:description",
-        content: "Answer AI-generated interview questions with a live timer and instant submission.",
+        content:
+          "Answer AI-generated interview questions with a live timer and instant submission.",
       },
     ],
   }),
@@ -64,7 +71,6 @@ function InterviewPage() {
   const [elapsed, setElapsed] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<BlobPart[]>([]);
-  
 
   useEffect(() => {
     setSession(loadSession() ?? DEFAULT_SESSION);
@@ -193,7 +199,9 @@ function InterviewPage() {
         try {
           const response = await api.transcribeSpeech(file);
           setAnswer(response.text);
-          toast.success("Speech transcribed", { description: "Your voice answer has been converted to text." });
+          toast.success("Speech transcribed", {
+            description: "Your voice answer has been converted to text.",
+          });
         } catch (error) {
           toast.error(
             error instanceof Error
@@ -210,12 +218,10 @@ function InterviewPage() {
       setRecording(true);
       setRecordingError(null);
     } catch (error) {
-      setRecordingError("Unable to access microphone. Please allow microphone access or use text input.");
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Unable to start voice recording.",
+      setRecordingError(
+        "Unable to access microphone. Please allow microphone access or use text input.",
       );
+      toast.error(error instanceof Error ? error.message : "Unable to start voice recording.");
     }
   };
 
@@ -228,21 +234,18 @@ function InterviewPage() {
   };
 
   return (
+    <RequireAuth>
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-2xl font-bold sm:text-3xl">
-            {session.category} interview
-          </h1>
+          <h1 className="truncate text-2xl font-bold sm:text-3xl">{session.category} interview</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Question {index} of {session.numQuestions} · {session.difficulty}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 shadow-[var(--shadow-card)]">
           <Clock className="h-4 w-4 text-primary" />
-          <span className="font-display text-sm font-bold tabular-nums">
-            {formatTime(elapsed)}
-          </span>
+          <span className="font-display text-sm font-bold tabular-nums">{formatTime(elapsed)}</span>
         </div>
       </header>
 
@@ -324,8 +327,13 @@ function InterviewPage() {
               </Button>
 
               <div className="flex flex-wrap gap-3">
-                <Button variant="accent" onClick={handleSubmit} disabled={submitting || transcribing}>
-                  <Send /> {submitting ? "Submitting…" : transcribing ? "Transcribing…" : "Submit Answer"}
+                <Button
+                  variant="accent"
+                  onClick={handleSubmit}
+                  disabled={submitting || transcribing}
+                >
+                  <Send />{" "}
+                  {submitting ? "Submitting…" : transcribing ? "Transcribing…" : "Submit Answer"}
                 </Button>
                 <Button variant="hero" onClick={handleNext}>
                   {isLast ? "Finish & evaluate" : "Next Question"} <ArrowRight />
@@ -344,8 +352,8 @@ function InterviewPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Move on without submitting?</AlertDialogTitle>
             <AlertDialogDescription>
-              This answer has not been submitted yet, so it will not be evaluated or counted in
-              your final score report.
+              This answer has not been submitted yet, so it will not be evaluated or counted in your
+              final score report.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -362,5 +370,6 @@ function InterviewPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </RequireAuth>
   );
 }

@@ -25,7 +25,13 @@ export function CircularScore({
   return (
     <div className={cn("flex flex-col items-center gap-3", className)}>
       <div className="relative" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="-rotate-90" role="img" aria-label={`${label}: ${value} of ${max}`}>
+        <svg
+          width={size}
+          height={size}
+          className="-rotate-90"
+          role="img"
+          aria-label={`${label}: ${value} of ${max}`}
+        >
           <defs>
             <linearGradient id="score-gradient" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="var(--primary)" />
@@ -54,9 +60,7 @@ export function CircularScore({
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-display text-4xl font-bold text-gradient">
-            {value.toFixed(1)}
-          </span>
+          <span className="font-display text-4xl font-bold text-gradient">{value.toFixed(1)}</span>
           <span className="text-xs text-muted-foreground">out of {max}</span>
         </div>
       </div>

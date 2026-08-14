@@ -6,6 +6,7 @@ from services.db import (
     DatabaseError,
     create_interview_record,
     create_question_record,
+    get_history_by_session,
     get_interview_record,
     mark_interview_completed,
     update_answer_record,
@@ -13,7 +14,7 @@ from services.db import (
 
 
 class SessionManager:
-    """Lightweight in-memory session manager. Replaceable with DB later."""
+    """Lightweight session manager with DB-backed recovery."""
 
     def __init__(self):
         self._lock = threading.Lock()
@@ -46,7 +47,58 @@ class SessionManager:
         return session
 
     def get_session(self, session_id: str) -> Dict[str, Any] | None:
-        return self._sessions.get(session_id)
+        session = self._sessions.get(session_id)
+        if session:
+            return session
+        session = self._load_session_from_db(session_id)
+        if session:
+            with self._lock:
+                self._sessions[session_id] = session
+        return session
+
+    def _load_session_from_db(self, session_id: str) -> Dict[str, Any] | None:
+        history = get_history_by_session(session_id)
+        if history is None:
+            return None
+
+        evaluations: list[Dict[str, Any]] = []
+        answers: list[Dict[str, Any]] = []
+
+        for question in history.get("questions", []):
+            question_number = question.get("question_number")
+            question_text = question.get("question_text")
+            for answer in question.get("answers", []):
+                answers.append(
+                    {
+                        "question_number": question_number,
+                        "question": question_text,
+                        "answer": answer.get("answer_text"),
+                    }
+                )
+                if answer.get("score") is not None:
+                    evaluations.append(
+                        {
+                            "question_number": question_number,
+                            "score": answer.get("score", 0),
+                            "accuracy": answer.get("accuracy", 0),
+                            "technical_knowledge": answer.get("technical_knowledge", 0),
+                            "clarity": answer.get("clarity", 0),
+                            "completeness": answer.get("completeness", 0),
+                        }
+                    )
+
+        session = {
+            "session_id": history["session_id"],
+            "category": history["category"],
+            "difficulty": history["difficulty"],
+            "number_of_questions": history["number_of_questions"],
+            "status": "completed" if history.get("completed_at") else "started",
+            "previous_questions": [q.get("question_text") for q in history.get("questions", [])],
+            "current_question": len(history.get("questions", [])),
+            "answers": answers,
+            "evaluations": evaluations,
+        }
+        return session
 
     def add_question(self, session_id: str, question: str) -> Dict[str, Any] | None:
         with self._lock:
@@ -127,13 +179,13 @@ class SessionManager:
         return session
 
     def get_evaluations(self, session_id: str) -> list | None:
-        session = self._sessions.get(session_id)
+        session = self.get_session(session_id)
         if not session:
             return None
         return session.get("evaluations", [])
 
     def next_question_number(self, session_id: str) -> int | None:
-        session = self._sessions.get(session_id)
+        session = self.get_session(session_id)
         if not session:
             return None
         return len(session.get("previous_questions", [])) + 1

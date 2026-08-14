@@ -19,6 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { api, type FinalReport } from "@/lib/api";
+import { RequireAuth } from "@/lib/auth-context";
 import { DEFAULT_SESSION, clearSession, loadSession } from "@/lib/interview-session";
 
 export const Route = createFileRoute("/report")({
@@ -54,20 +55,23 @@ function ReportPage() {
         toast.error(
           error instanceof Error
             ? error.message
-            : "Unable to load your final report. Please try again."
+            : "Unable to load your final report. Please try again.",
         );
       });
   }, []);
 
   if (!data) {
     return (
+      <RequireAuth>
       <div className="mx-auto max-w-5xl px-4 py-24">
         <LoadingSpinner label="Building your final report…" />
       </div>
+      </RequireAuth>
     );
   }
 
   return (
+    <RequireAuth>
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 sm:flex sm:justify-between">
         <div className="min-w-0">
@@ -179,5 +183,6 @@ function ReportPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </RequireAuth>
   );
 }

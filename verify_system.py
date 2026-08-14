@@ -38,7 +38,7 @@ print("\n🔌 BACKEND API ENDPOINTS:")
 print("-" * 70)
 
 api_endpoints = [
-    ('GET', '/api/health', 'Health Check'),
+    ('GET', '/api/v1/health', 'Health Check'),
 ]
 
 all_apis_ok = True

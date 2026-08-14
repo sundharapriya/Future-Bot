@@ -5,7 +5,10 @@
  */
 export function AppBackground() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden app-backdrop">
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden app-backdrop"
+    >
       {/* dotted grid texture */}
       <div className="absolute inset-0 bg-dot-grid text-primary/15 [mask-image:radial-gradient(80%_60%_at_50%_0%,black,transparent)]" />
 

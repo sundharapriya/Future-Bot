@@ -1,6 +1,5 @@
 {
-  "generatedRouteTree": ".tanstack/routeTree.gen.ts",
-  "tmpDir": ".tanstack/tmp",
+  "generatedRouteTree": "./src/routeTree.gen.ts",
   "routesDirectory": "./src/routes",
   "autoCodeSplitting": false
 }

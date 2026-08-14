@@ -1,7 +1,7 @@
 import { defineNitroConfig } from "nitro/config";
 
 export default defineNitroConfig({
-  preset: "vercel",
+  preset: process.env.VERCEL ? "vercel" : undefined,
   vercel: {
     entryFormat: "node",
     functions: {

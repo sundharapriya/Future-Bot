@@ -20,6 +20,8 @@ export default defineConfig({
   // may write into a tmp dir and then rename into place which can trigger
   // Vite's watcher and cause a file-lock race. Ignoring these avoids that.
   server: {
+    port: 3000,
+    strictPort: true,
     hmr: false,
     watch: {
       ignored: ["**/src/routeTree.gen.ts", "**/.tanstack/**"],

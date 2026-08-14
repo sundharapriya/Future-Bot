@@ -3,6 +3,7 @@ import { defineNitroConfig } from "nitro/config";
 export default defineNitroConfig({
   preset: "vercel",
   vercel: {
+    entryFormat: "node",
     functions: {
       runtime: "nodejs22.x",
     },

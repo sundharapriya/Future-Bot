@@ -110,42 +110,73 @@ def evaluate_answer(question: str, answer: str) -> EvaluationResult:
             raise LLMError(f"Invalid LLM response: {exc}") from exc
 
     answer_text = answer.strip()
-    score = 0
-    acc = 0
-    tech = 0
-    rel = 0
-    clarity = 0
-    completeness = 0
-    strengths: list[str] = []
-    weaknesses: list[str] = []
-    suggestions: list[str] = []
-
-    if len(answer_text) < 40:
-        clarity = 5
-        weaknesses.append("Answer is too brief; add more detail.")
-    else:
+    words = answer_text.split()
+    word_count = len(words)
+    
+    # 1. Clarity scoring based on length and structure
+    if word_count < 10:
+        clarity = 4
+        weaknesses.append("The response is very short; elaborate further on your reasoning.")
+    elif word_count < 25:
+        clarity = 6
+        weaknesses.append("The response provides an overview but lacks comprehensive depth.")
+    elif word_count < 80:
         clarity = 8
-        strengths.append("Answer is clear and sufficiently developed.")
+        strengths.append("The response is well-structured, clear, and direct.")
+    else:
+        clarity = 9
+        strengths.append("Comprehensive, in-depth explanation with thorough technical context.")
 
-    question_lower = question.lower()
+    # 2. Extract significant keywords from question
+    q_words = [w.strip("?,.:;\"'()[]{}") for w in question.lower().split()]
+    stopwords = {"what", "is", "the", "difference", "between", "how", "do", "you", "and", "or", "in", "with", "explain", "describe", "why", "when", "would", "which", "a", "an", "for", "to", "of", "on", "at", "by", "from", "terms", "examples", "context", "level", "appropriate", "interview"}
+    key_q_words = [w for w in q_words if len(w) > 3 and w not in stopwords]
+    
     ans_lower = answer_text.lower()
-    if "list" in question_lower and "list" in ans_lower:
-        acc = 8
-        strengths.append("Answer mentions the key concept from the question.")
+    matched_keywords = [w for w in key_q_words if w in ans_lower]
+    
+    # 3. Relevance scoring
+    if key_q_words:
+        keyword_coverage = len(matched_keywords) / len(key_q_words)
+        if keyword_coverage > 0.6:
+            rel = 9
+            strengths.append("Directly addresses the primary technical themes of the question.")
+        elif keyword_coverage > 0.3:
+            rel = 7
+            strengths.append("Covers relevant concepts related to the question topic.")
+        else:
+            rel = 6
+            weaknesses.append("Make sure to explicitly address all core aspects mentioned in the prompt.")
     else:
-        acc = 6
-        weaknesses.append("Consider answering with the main term from the question.")
+        rel = 8
 
-    if "mutable" in ans_lower or "immutable" in ans_lower or "change" in ans_lower:
+    # 4. Technical depth & accuracy
+    technical_indicators = ["because", "internally", "performance", "complexity", "memory", "runtime", "advantage", "trade-off", "tradeoff", "example", "use case", "guarantees", "process", "implementation", "mechanism"]
+    tech_matches = [w for w in technical_indicators if w in ans_lower]
+    
+    if len(tech_matches) >= 3 or word_count >= 45:
         tech = 8
+        acc = 8
+        strengths.append("Includes strong technical reasoning and practical engineering context.")
+    elif len(tech_matches) >= 1 or word_count >= 20:
+        tech = 7
+        acc = 7
+        suggestions.append("Consider discussing internal mechanisms or performance implications.")
     else:
-        tech = 6
-        suggestions.append("Include technical reasoning behind the behavior.")
+        tech = 5
+        acc = 6
+        suggestions.append("Add a concrete real-world code or architectural example to illustrate your point.")
 
-    rel = 9 if question_lower in ans_lower or len(answer_text) > 20 else 7
-    completeness = min(10, acc + tech) // 2
+    # 5. Completeness & Overall Score
+    completeness = min(10, max(4, int(round((acc + tech + rel) / 3))))
     score = int(round((acc + tech + rel + clarity + completeness) / 5))
-    overall = "Good answer." if score >= 7 else "Needs improvement."
+    
+    if score >= 8:
+        overall = "Excellent answer with strong technical depth and clear communication."
+    elif score >= 6:
+        overall = "Solid answer covering the main points. Adding deeper trade-offs and examples will strengthen it."
+    else:
+        overall = "Basic understanding shown. Provide more detailed explanations, terminology, and practical examples."
 
     return EvaluationResult(
         score=score,

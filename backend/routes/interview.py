@@ -24,7 +24,7 @@ router = APIRouter()
 
 
 @router.post("/interview/start", response_model=InterviewStartResponse)
-async def start_interview(payload: InterviewStartRequest):
+def start_interview(payload: InterviewStartRequest):
     # Validation is handled by Pydantic + Enums. Extra check just in case.
     if payload.category not in Category:
         raise HTTPException(status_code=400, detail="Unsupported category")
@@ -46,7 +46,7 @@ async def start_interview(payload: InterviewStartRequest):
 
 
 @router.get("/interview/question/{session_id}", response_model=InterviewQuestionResponse)
-async def get_next_question(session_id: str):
+def get_next_question(session_id: str):
     session = session_manager.get_session(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -82,7 +82,7 @@ async def get_next_question(session_id: str):
 
 
 @router.post("/interview/answer", response_model=AnswerSubmissionResponse)
-async def submit_answer(payload: AnswerSubmissionRequest):
+def submit_answer(payload: AnswerSubmissionRequest):
     session = session_manager.get_session(payload.session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -123,7 +123,7 @@ async def submit_answer(payload: AnswerSubmissionRequest):
 
 
 @router.post("/interview/evaluate", response_model=EvaluationResponse)
-async def evaluate_answer(payload: EvaluationRequest):
+def evaluate_answer(payload: EvaluationRequest):
     session = session_manager.get_session(payload.session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -150,7 +150,7 @@ async def evaluate_answer(payload: EvaluationRequest):
 
 
 @router.get("/interview/score/{session_id}", response_model=ScoreResponse)
-async def get_score(session_id: str):
+def get_score(session_id: str):
     session = session_manager.get_session(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -161,7 +161,7 @@ async def get_score(session_id: str):
 
 
 @router.get("/interview/history/{session_id}", response_model=InterviewHistoryResponse)
-async def get_interview_history(session_id: str):
+def get_interview_history(session_id: str):
     try:
         history = get_history_by_session(session_id)
     except DatabaseError:
@@ -173,7 +173,7 @@ async def get_interview_history(session_id: str):
 
 
 @router.get("/interview/report/{session_id}", response_model=InterviewReportResponse)
-async def get_interview_report(session_id: str):
+def get_interview_report(session_id: str):
     try:
         report = generate_final_report(session_id)
     except DatabaseError:

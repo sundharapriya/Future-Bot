@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 @router.get("/auth/profile", response_model=UserProfile)
-async def get_profile(user_id: str = Depends(get_current_user)):
+def get_profile(user_id: str = Depends(get_current_user)):
     user = get_user_by_id(user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -16,13 +16,13 @@ async def get_profile(user_id: str = Depends(get_current_user)):
 
 
 @router.put("/auth/profile", response_model=UserProfile)
-async def put_profile(payload: UpdateProfileRequest, user_id: str = Depends(get_current_user)):
+def put_profile(payload: UpdateProfileRequest, user_id: str = Depends(get_current_user)):
     user = update_user_profile(int(user_id), name=payload.name, preferred_role=payload.preferred_role, bio=getattr(payload, 'bio', None), avatar_url=getattr(payload, 'avatar_url', None))
     return UserProfile(id=user.id, name=user.name, email=user.email, preferred_role=user.preferred_role, bio=user.bio, avatar_url=user.avatar_url)
 
 
 @router.put("/auth/password")
-async def change_password(payload: ChangePasswordRequest, user_id: str = Depends(get_current_user)):
+def change_password(payload: ChangePasswordRequest, user_id: str = Depends(get_current_user)):
     user = get_user_by_id(user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

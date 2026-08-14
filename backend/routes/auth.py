@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.post("/auth/register", response_model=RegisterResponse)
-async def register(payload: RegisterRequest):
+def register(payload: RegisterRequest):
     try:
         user = auth_service.register_user(payload.name, payload.email, payload.password, payload.preferred_role)
         return RegisterResponse(success=True, message="User created")
@@ -23,7 +23,7 @@ async def register(payload: RegisterRequest):
 
 
 @router.post("/auth/login", response_model=LoginResponse)
-async def login(payload: LoginRequest):
+def login(payload: LoginRequest):
     res = auth_service.authenticate_user(payload.email, payload.password)
     if not res:
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -31,7 +31,7 @@ async def login(payload: LoginRequest):
 
 
 @router.get("/auth/me", response_model=UserProfile)
-async def me(user_id: str = Depends(get_current_user)):
+def me(user_id: str = Depends(get_current_user)):
     user = get_user_by_id(user_id) if user_id else None
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -40,7 +40,7 @@ async def me(user_id: str = Depends(get_current_user)):
 
 
 @router.post("/auth/logout")
-async def logout(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
+def logout(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     if credentials is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     token = credentials.credentials
@@ -57,7 +57,7 @@ async def logout(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme
 
 
 @router.post("/auth/refresh", response_model=LoginResponse)
-async def refresh(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
+def refresh(credentials: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     if credentials is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     token = credentials.credentials

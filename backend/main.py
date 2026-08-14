@@ -28,25 +28,23 @@ logger = logging.getLogger("uvicorn.error")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    try:
+        import anyio
+        await anyio.to_thread.run_sync(init_db)
+    except Exception as e:
+        logger.warning(f"DB init error: {e}")
     yield
 
 # Create app
 app = FastAPI(title=APP_NAME, lifespan=lifespan)
 
 # CORS configuration
-_allowed_origins = os.getenv("ALLOWED_ORIGINS", "*")
-if _allowed_origins.strip() == "*":
-    origins: List[str] = ["*"]
-else:
-    origins = [o.strip() for o in _allowed_origins.split(",") if o.strip()]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Include routes

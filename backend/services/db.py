@@ -23,7 +23,6 @@ def get_db_session() -> Session:
 
 
 def create_interview_record(session_id: str, category: str, difficulty: str, number_of_questions: int) -> Interview:
-    init_db()
     with SessionLocal() as db:
         try:
             interview = Interview(
@@ -131,7 +130,6 @@ def get_interview_record(session_id: str) -> Interview | None:
 
 
 def create_user(name: str, email: str, password_hash: str, preferred_role: str | None = None) -> User:
-    init_db()
     with SessionLocal() as db:
         try:
             existing = db.execute(select(User).where(User.email == email)).scalar_one_or_none()

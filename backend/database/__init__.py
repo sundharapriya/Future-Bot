@@ -14,16 +14,22 @@ raw_database_url = os.getenv("DATABASE_URL") or settings.DATABASE_URL or f"sqlit
 
 # Normalize SQLite relative paths to absolute paths so the engine can open the file
 if raw_database_url.startswith("sqlite:"):
-    # extract path portion after the scheme
-    path_part = raw_database_url.split("sqlite:", 1)[1]
-    # strip leading slashes
-    normalized = path_part.lstrip("/")
-    # if this is a relative path, resolve it against the backend directory
-    if not os.path.isabs(normalized):
-        abs_path = (BASE_DIR / normalized).resolve()
-        DATABASE_URL = f"sqlite:///{abs_path.as_posix()}"
-    else:
+    if raw_database_url in ("sqlite://", "sqlite:///:memory:"):
         DATABASE_URL = raw_database_url
+    else:
+        # Strip scheme
+        if raw_database_url.startswith("sqlite:///"):
+            path_part = raw_database_url[len("sqlite:///"):]
+        else:
+            path_part = raw_database_url.split("sqlite:", 1)[1]
+        
+        # Check if already absolute (Unix starts with /, Windows has drive letter like C:)
+        is_abs = path_part.startswith("/") or (len(path_part) > 1 and path_part[1] == ":") or os.path.isabs(path_part)
+        if not is_abs:
+            abs_path = (BASE_DIR.parent / path_part).resolve()
+            DATABASE_URL = f"sqlite:///{abs_path.as_posix()}"
+        else:
+            DATABASE_URL = raw_database_url
 else:
     DATABASE_URL = raw_database_url
 

@@ -7,7 +7,7 @@ import { F as Brain, g as Menu, r as User, t as X, v as LogOut } from "../_libs/
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DPyxFXbj.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BjZYP1If.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -730,7 +730,7 @@ function RootComponent() {
 		] })
 	});
 }
-var $$splitComponentImporter$6 = () => import("./routes-Bdyk36ng.mjs");
+var $$splitComponentImporter$6 = () => import("./routes-ZvhPw_sw.mjs");
 var Route$6 = createFileRoute("/")({
 	head: () => ({ meta: [
 		{ title: "InterviewAI — AI Interview Preparation Assistant" },
@@ -747,9 +747,10 @@ var Route$6 = createFileRoute("/")({
 			content: "AI-generated questions, voice or text answers, instant AI evaluation and a full interview score report."
 		}
 	] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./evaluation-CTZRJUpk.mjs");
+var $$splitComponentImporter$5 = () => import("./evaluation-C3CDl5iu.mjs");
 var Route$5 = createFileRoute("/evaluation")({
 	head: () => ({ meta: [
 		{ title: "Answer Evaluation — InterviewAI" },
@@ -766,9 +767,10 @@ var Route$5 = createFileRoute("/evaluation")({
 			content: "AI scoring across accuracy, clarity, technical knowledge and communication."
 		}
 	] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./interview-2vqUQR7L.mjs");
+var $$splitComponentImporter$4 = () => import("./interview-BFW0wiWF.mjs");
 var Route$4 = createFileRoute("/interview")({
 	head: () => ({ meta: [
 		{ title: "Mock Interview — InterviewAI" },
@@ -785,25 +787,28 @@ var Route$4 = createFileRoute("/interview")({
 			content: "Answer AI-generated interview questions with a live timer and instant submission."
 		}
 	] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-var $$splitComponentImporter$3 = () => import("./login-DxWkvluF.mjs");
+var $$splitComponentImporter$3 = () => import("./login-DKcVz5t-.mjs");
 var Route$3 = createFileRoute("/login")({
 	head: () => ({ meta: [{ title: "Sign In — InterviewAI" }, {
 		name: "description",
 		content: "Sign in to InterviewAI to continue your AI-powered mock interview practice."
 	}] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./register-CXFkR3XJ.mjs");
+var $$splitComponentImporter$2 = () => import("./register-BY4ymVBl.mjs");
 var Route$2 = createFileRoute("/register")({
 	head: () => ({ meta: [{ title: "Create Account — InterviewAI" }, {
 		name: "description",
 		content: "Sign up for InterviewAI to start practicing AI-powered mock interviews."
 	}] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./report-DHs4KLZA.mjs");
+var $$splitComponentImporter$1 = () => import("./report-BgYn7hRp.mjs");
 var Route$1 = createFileRoute("/report")({
 	head: () => ({ meta: [
 		{ title: "Final Interview Report — InterviewAI" },
@@ -820,9 +825,10 @@ var Route$1 = createFileRoute("/report")({
 			content: "Average score, strong topics, weak topics and overall AI feedback."
 		}
 	] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./setup-DrTxfaN3.mjs");
+var $$splitComponentImporter = () => import("./setup-CgoHjfHd.mjs");
 var Route = createFileRoute("/setup")({
 	head: () => ({ meta: [
 		{ title: "Interview Setup — InterviewAI" },
@@ -839,6 +845,7 @@ var Route = createFileRoute("/setup")({
 			content: "Configure category, difficulty and question count for your AI mock interview."
 		}
 	] }),
+	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter, "component")
 });
 var rootRouteChildren = {

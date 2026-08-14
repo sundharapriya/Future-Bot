@@ -18,6 +18,7 @@ export const Route = createFileRoute("/register")({
       },
     ],
   }),
+  ssr: false,
   component: RegisterPage,
 });
 

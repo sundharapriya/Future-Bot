@@ -44,6 +44,7 @@ export const Route = createFileRoute("/interview")({
       },
     ],
   }),
+  ssr: false,
   component: InterviewPage,
 });
 

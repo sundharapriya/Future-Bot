@@ -26,6 +26,7 @@ export const Route = createFileRoute("/evaluation")({
       },
     ],
   }),
+  ssr: false,
   component: EvaluationPage,
 });
 

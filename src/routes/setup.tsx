@@ -35,6 +35,7 @@ export const Route = createFileRoute("/setup")({
       },
     ],
   }),
+  ssr: false,
   component: SetupPage,
 });
 

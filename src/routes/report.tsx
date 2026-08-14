@@ -38,6 +38,7 @@ export const Route = createFileRoute("/report")({
       },
     ],
   }),
+  ssr: false,
   component: ReportPage,
 });
 

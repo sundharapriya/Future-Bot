@@ -31,6 +31,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Load token from localStorage on mount
   useEffect(() => {
+    // Only run in browser environment, not during SSR
+    if (typeof window === "undefined") {
+      setLoading(false);
+      return;
+    }
+
     const savedToken = localStorage.getItem("auth_token");
     if (savedToken) {
       setToken(savedToken);
@@ -58,8 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true);
       const response = await apiLogin(credentials);
       
-      // Save token
-      localStorage.setItem("auth_token", response.access_token);
+      // Save token (only in browser)
+      if (typeof window !== "undefined") {
+        localStorage.setItem("auth_token", response.access_token);
+      }
       setToken(response.access_token);
 
       // Fetch user profile
@@ -104,7 +112,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
-      localStorage.removeItem("auth_token");
+      // Only access localStorage in browser
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth_token");
+      }
       setToken(null);
       setUser(null);
       setError(null);

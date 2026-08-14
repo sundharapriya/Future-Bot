@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-De1qqb3t.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BDlUbJ9X.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/__root.tsx",
@@ -12,75 +12,75 @@ var tsrStartManifest = () => ({ routes: {
 			"/setup"
 		],
 		preloads: [
-			"/assets/index-3Go4ADSg.js",
+			"/assets/index-C3bqvOIy.js",
 			"/assets/rolldown-runtime-CbXtAM7H.js",
-			"/assets/auth-context-DyhxXmEu.js",
-			"/assets/react-dom-vuZcchBt.js",
-			"/assets/link-C6UqEkrr.js"
+			"/assets/auth-context-UszQzU0L.js",
+			"/assets/react-dom-QGqANsRB.js",
+			"/assets/link-BWdK06j9.js"
 		],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-3Go4ADSg.js"
+			src: "/assets/index-C3bqvOIy.js"
 		} }]
 	},
 	"/": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-Ct94lMLc.js",
-			"/assets/arrow-right-DaSGhZSV.js",
-			"/assets/mic-C_KMSoPw.js"
+			"/assets/routes-CBQaYcaH.js",
+			"/assets/arrow-right-ZEZFB9KE.js",
+			"/assets/mic-TWNzj_p2.js"
 		]
 	},
 	"/evaluation": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/evaluation.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/evaluation-XOCkony5.js",
-			"/assets/arrow-right-DaSGhZSV.js",
-			"/assets/interview-session-7uBzX0BJ.js",
-			"/assets/ScoreBar-B3z8jlzE.js"
+			"/assets/evaluation-DN4YE_N0.js",
+			"/assets/arrow-right-ZEZFB9KE.js",
+			"/assets/interview-session-DbIVBvR8.js",
+			"/assets/ScoreBar-D7qt29U9.js"
 		]
 	},
 	"/interview": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/interview.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/interview-CGDGwcdw.js",
-			"/assets/arrow-right-DaSGhZSV.js",
-			"/assets/interview-session-7uBzX0BJ.js",
-			"/assets/mic-C_KMSoPw.js",
-			"/assets/badge-B5jJiQzV.js"
+			"/assets/interview-DdMqcLBE.js",
+			"/assets/arrow-right-ZEZFB9KE.js",
+			"/assets/interview-session-DbIVBvR8.js",
+			"/assets/mic-TWNzj_p2.js",
+			"/assets/badge-DBhaOUS2.js"
 		]
 	},
 	"/login": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/login.tsx",
 		children: void 0,
-		preloads: ["/assets/login-9BlR8Akg.js", "/assets/label-B2gQDZKF.js"]
+		preloads: ["/assets/login-D4VG0FVV.js", "/assets/label-BO0WMumt.js"]
 	},
 	"/register": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/register.tsx",
 		children: void 0,
-		preloads: ["/assets/register-C3EDfgfz.js", "/assets/label-B2gQDZKF.js"]
+		preloads: ["/assets/register-BiazhNjC.js", "/assets/label-BO0WMumt.js"]
 	},
 	"/report": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/report.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/report-mPyM5KWy.js",
-			"/assets/interview-session-7uBzX0BJ.js",
-			"/assets/ScoreBar-B3z8jlzE.js",
-			"/assets/badge-B5jJiQzV.js"
+			"/assets/report-DF_qvarK.js",
+			"/assets/interview-session-DbIVBvR8.js",
+			"/assets/ScoreBar-D7qt29U9.js",
+			"/assets/badge-DBhaOUS2.js"
 		]
 	},
 	"/setup": {
 		filePath: "C:/Users/Sundh/Desktop/Own_Projects/Interview-Buddy/interview-buddy-f85e0e33-main/src/routes/setup.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/setup-CPYhJ17o.js",
-			"/assets/arrow-right-DaSGhZSV.js",
-			"/assets/interview-session-7uBzX0BJ.js"
+			"/assets/setup-BDBnCo-h.js",
+			"/assets/arrow-right-ZEZFB9KE.js",
+			"/assets/interview-session-DbIVBvR8.js"
 		]
 	}
 } });

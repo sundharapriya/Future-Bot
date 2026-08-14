@@ -3,9 +3,9 @@ import { f as require_jsx_runtime, p as require_react } from "../_libs/@radix-ui
 import { v as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { D as EyeOff, E as Eye, _ as Mail, b as Lock, i as UserPlus, r as User } from "../_libs/lucide-react.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { a as Button, r as useAuth } from "./router-CiGrT_2z.mjs";
-import { n as Label, t as Input } from "./label-CGbbnfpM.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/register-s4smDOJ6.js
+import { a as Button, r as useAuth } from "./router-Bfi8i8Rl.mjs";
+import { n as Label, t as Input } from "./label-DqE_AHqq.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/register-qwlKZWGw.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function RegisterPage() {

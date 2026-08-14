@@ -7,7 +7,7 @@ import { F as Brain, g as Menu, r as User, t as X, v as LogOut } from "../_libs/
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CiGrT_2z.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Bfi8i8Rl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -699,6 +699,7 @@ var Route$7 = createRootRouteWithContext()({
 			}
 		]
 	}),
+	ssr: false,
 	shellComponent: RootShell,
 	component: RootComponent,
 	notFoundComponent: NotFoundComponent,
@@ -734,7 +735,7 @@ function RootComponent() {
 		] })
 	});
 }
-var $$splitComponentImporter$6 = () => import("./routes-TkkO3R5z.mjs");
+var $$splitComponentImporter$6 = () => import("./routes-CrQce-vR.mjs");
 var Route$6 = createFileRoute("/")({
 	head: () => ({ meta: [
 		{ title: "InterviewAI — AI Interview Preparation Assistant" },
@@ -754,7 +755,7 @@ var Route$6 = createFileRoute("/")({
 	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./evaluation-uoW8j64M.mjs");
+var $$splitComponentImporter$5 = () => import("./evaluation-RJZkEDHM.mjs");
 var Route$5 = createFileRoute("/evaluation")({
 	head: () => ({ meta: [
 		{ title: "Answer Evaluation — InterviewAI" },
@@ -774,7 +775,7 @@ var Route$5 = createFileRoute("/evaluation")({
 	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./interview-DbgRG6-I.mjs");
+var $$splitComponentImporter$4 = () => import("./interview-D3H4QfC5.mjs");
 var Route$4 = createFileRoute("/interview")({
 	head: () => ({ meta: [
 		{ title: "Mock Interview — InterviewAI" },
@@ -794,7 +795,7 @@ var Route$4 = createFileRoute("/interview")({
 	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-var $$splitComponentImporter$3 = () => import("./login-Chk_NZpD.mjs");
+var $$splitComponentImporter$3 = () => import("./login-BqDRlwCF.mjs");
 var Route$3 = createFileRoute("/login")({
 	head: () => ({ meta: [{ title: "Sign In — InterviewAI" }, {
 		name: "description",
@@ -803,7 +804,7 @@ var Route$3 = createFileRoute("/login")({
 	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./register-s4smDOJ6.mjs");
+var $$splitComponentImporter$2 = () => import("./register-qwlKZWGw.mjs");
 var Route$2 = createFileRoute("/register")({
 	head: () => ({ meta: [{ title: "Create Account — InterviewAI" }, {
 		name: "description",
@@ -812,7 +813,7 @@ var Route$2 = createFileRoute("/register")({
 	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./report-oMJqdcKq.mjs");
+var $$splitComponentImporter$1 = () => import("./report-DrCYZccn.mjs");
 var Route$1 = createFileRoute("/report")({
 	head: () => ({ meta: [
 		{ title: "Final Interview Report — InterviewAI" },
@@ -832,7 +833,7 @@ var Route$1 = createFileRoute("/report")({
 	ssr: false,
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./setup-Wkcz-zui.mjs");
+var $$splitComponentImporter = () => import("./setup-DoFrLxhe.mjs");
 var Route = createFileRoute("/setup")({
 	head: () => ({ meta: [
 		{ title: "Interview Setup — InterviewAI" },

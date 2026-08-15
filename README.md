@@ -1,6 +1,8 @@
 # 🤖 InterviewAI — AI-Powered Mock Interview Prep Platform
 
 > **InterviewAI** (Future-Bot) is a full-stack, enterprise-grade AI interview preparation platform. Practice realistic technical and HR mock interviews with real-time AI question generation, speech-to-text voice answering, instant per-answer AI evaluations, and detailed diagnostic performance score reports.
+>
+> 👨‍💻 **Designed & Developed by [Sundharapriya](https://github.com/sundharapriya)**
 
 ---
 
@@ -204,6 +206,16 @@ npm run build
 
 ---
 
+## 👨‍💻 Developer & Author
+
+**InterviewAI** was designed, architected, and engineered by **Sundharapriya**.
+
+- **Lead Full-Stack & AI Engineer:** Sundharapriya
+- **Architecture:** TanStack Start (React 19 SSR) + FastAPI (Python 3.11) + OpenAI GPT-4o & Whisper + Serverless PostgreSQL (Neon)
+
+---
+
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
+

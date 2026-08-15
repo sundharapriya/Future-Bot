@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, BarChart3, Brain, ClipboardCheck, Mic, Sparkles, Target } from "lucide-react";
+import { ArrowRight, BarChart3, Brain, ClipboardCheck, Code2, Mic, Sparkles, Target, Award } from "lucide-react";
 
 import heroImage from "@/assets/hero-interview.jpg";
 import { Button } from "@/components/ui/button";
@@ -8,17 +8,17 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "InterviewAI — AI Interview Preparation Assistant" },
+      { title: "InterviewAI — AI Interview Preparation Assistant by Sundharapriya" },
       {
         name: "description",
         content:
-          "Run AI-powered mock interviews in Python, SQL, ML, AI, Data Structures and HR. Get instant evaluation, personalised feedback and a score report.",
+          "Run AI-powered mock interviews in Python, SQL, ML, AI, Data Structures and HR. Designed & Developed by Sundharapriya.",
       },
-      { property: "og:title", content: "AI Interview Preparation Assistant" },
+      { property: "og:title", content: "AI Interview Preparation Assistant by Sundharapriya" },
       {
         property: "og:description",
         content:
-          "AI-generated questions, voice or text answers, instant AI evaluation and a full interview score report.",
+          "AI-generated questions, voice or text answers, instant AI evaluation and a full interview score report. Created by Sundharapriya.",
       },
     ],
   }),
@@ -77,10 +77,17 @@ function HomePage() {
       <section className="relative overflow-hidden bg-hero-glow">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
           <div className="animate-fade-in">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-xs font-semibold text-primary backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" />
-              Powered by AI evaluation
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary backdrop-blur">
+                <Sparkles className="h-3.5 w-3.5" />
+                Powered by AI evaluation
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur shadow-sm">
+                <Code2 className="h-3.5 w-3.5 text-primary" />
+                Created by <strong className="font-semibold text-foreground">Sundharapriya</strong>
+              </span>
+            </div>
+
             <h1 className="mt-6 text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-6xl">
               AI Interview <span className="text-gradient">Preparation Assistant</span>
             </h1>
@@ -112,7 +119,8 @@ function HomePage() {
                     <Link to="/login">Sign In</Link>
                   </Button>
                 </>
-              )}
+              )
+              }
             </div>
 
             <dl className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -158,6 +166,35 @@ function HomePage() {
               <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* Developer Showcase Section */}
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-card via-card/95 to-primary/5 p-8 sm:p-12 shadow-lg">
+          <div className="absolute -right-12 -bottom-12 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div className="max-w-2xl text-left">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary border border-primary/20">
+                <Award className="h-3.5 w-3.5" /> Platform Architect &amp; Developer
+              </div>
+              <h2 className="mt-4 text-2xl font-bold sm:text-3xl">
+                Engineered by <span className="text-gradient">Sundharapriya</span>
+              </h2>
+              <p className="mt-3 text-sm text-muted-foreground sm:text-base leading-relaxed">
+                InterviewAI is built with end-to-end full-stack precision — featuring type-safe SSR routing, async FastAPI endpoints, real-time OpenAI GPT-4o answer scoring, and serverless database integration.
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-4 rounded-2xl border border-border/80 bg-background/60 p-4 backdrop-blur">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-primary text-xl font-bold text-primary-foreground shadow-[var(--shadow-glow)]">
+                S
+              </div>
+              <div>
+                <h4 className="font-bold text-foreground text-base">Sundharapriya</h4>
+                <p className="text-xs text-primary font-medium">Full-Stack &amp; AI Engineer</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

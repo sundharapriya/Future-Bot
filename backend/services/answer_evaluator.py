@@ -113,6 +113,10 @@ def evaluate_answer(question: str, answer: str) -> EvaluationResult:
     words = answer_text.split()
     word_count = len(words)
     
+    strengths: list[str] = []
+    weaknesses: list[str] = []
+    suggestions: list[str] = []
+    
     # 1. Clarity scoring based on length and structure
     if word_count < 10:
         clarity = 4

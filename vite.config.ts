@@ -5,12 +5,10 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     tanstackStart(),
-    nitro({
-      preset: "vercel",
-    }),
+    ...(command === "build" ? [nitro({ preset: "vercel" })] : []),
     react(),
     tailwindcss(),
     tsConfigPaths(),
@@ -27,4 +25,4 @@ export default defineConfig({
       ignored: ["**/src/routeTree.gen.ts", "**/.tanstack/**"],
     },
   },
-});
+}));
